@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "Android에서의 Dependency injection : Dagger(1)"
+date:   2018-05-30
+description: DI가 무엇인지 알아본다.
+---
+
 #Android에서의 Dependency injection : Dagger(1)(번역)
 
 글쓴이 : Antonio Leiva
