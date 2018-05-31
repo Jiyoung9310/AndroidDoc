@@ -4,13 +4,14 @@ title:  "Android에서의 Dependency injection : Dagger(1)"
 date:   2018-05-30
 description: DI가 무엇인지 알아본다.
 ---
+<p class="intro"><span class="dropcap">안</span>드로이드 아키텍처</p>
 
 #Android에서의 Dependency injection : Dagger(1)(번역)
 
 글쓴이 : Antonio Leiva
 [이 블로그 글을 번역하였습니다.](https://antonioleiva.com/dependency-injection-android-dagger-part-1/)
 
----
+
 이번 새로운 포스팅 시리즈는 의존성 주입이 무엇인지, 그것의 사용 목적은 무엇인지, 어떻게 사용하는지에 대해서 안드로이드 프로젝트의 Dagger를 통해 설명할 것이다. Dagger는 안드로이드를 염두하여 설계된 최고의 구현체로 알려져있다.
 
 이 글은 이전 포스트인 [MVP for Android](https://antonioleiva.com/mvp-android/)의 후속이라고 볼 수 있다. 여러분들 중 일부가 같은 프로젝트에서 구현된 MVP를 보는 것에 꽤 관심있어하는 것을 알고 있기 때문이다. 그리고 나는 그것들이 함께 잘 동작한다고 생각한다.
