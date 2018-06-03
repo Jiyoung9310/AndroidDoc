@@ -66,3 +66,54 @@ public class DomainModule {
     }
 }
 ~~~
+이 모듈이 완성되지 않은 것을 인지함으로써(complete값이 false), 우리는 이 모듈의 일부 의존성은 다른 모듈에서 제공되어야 한다고 말한다. AppModule로부터 온 Application의 경우이다. DI로부터 이 AnalyticsManager를 요구할 때, Dagger는 이 메소드를 사용할 것이다. 다른 의존성인 Application이 객체 그래프에 요청될 것임을 탐지할 것이다. 또한 우리는 이 모듈을 라이브러리로 지정해야한다. 왜냐하면 Dagger 컴파일러가 AnalyticsManager가 자체 또는 주입된 클래스에서 사용되지 않았음을 감지하기 때문이다. 이것은 AppModule의 라이브러리 모듈로 작동한다.
+
+우리는 AppModule이 여기에 포함되도록 지정할 것이다. 이전 클래스도 돌아가보면,
+~~~
+@Module(
+	injects = {
+    	App.class
+    },
+    includes = {
+    	DomainModule.class
+    }
+)
+public class AppModule {
+...
+}
+~~~
+includes 속성은 저런 목적을 위해 존재한다.
+
+## 객체 그래프 생성하기
+객체 그래프는 모든 의존성이 살아있는 공간이다. 객체 그래프는 생성된 인스턴스를 담고 있다. 그리고 우리가 추가한 객체에 그것을 주입할 수 있다.
+
+이전 예제(AnalyticsManager)에서 우리는 생성자를 통해 주입되는 "고전적인" 의존성 주입을 살펴보았다. 하지만 우리가 생성자로 제어할 수 없는 안드로이드 클래스들(Application, Activity)이 존재한다. 그러므로 간단하게 의존성을 주입하는 방법이 필요하다.
+
+ObjectGraph결합 생성과 이 직접 주입은 App 클래스에서 표현된다. 메인 객체 그래프는 Application 클래스에서 생성되고 이 의존성을 갖기 위해서 주입된다.
+~~~
+public class App extends Application {
+	private ObjectGraph objectGraph;
+    @Inject AnalyticsManager analyticsManager;
+    
+    @Override public void onCreate() {
+    	super.onCreate();
+        objectGraph = ObjectGraph.create(getModules().toArray());
+        objectGraph.inject(this);
+        analyticsManager.registerAppEnter();
+    }
+    
+    private List<Object> getModules() {
+    	return Arrays.<Object>asList(new AppModule(this));
+    }
+}
+~~~
+@Inject 어노테이션을 통해 의존성의 정의한다. 필드는 반드시 public이나 디폴트 범위이어야 Dagger가 할당할 수 있다. 우리는 모듈을 가진 배열을 생성한다. (우리는 단 하나만을 가지고 있다. DomainModule은 AppModule에 포함됨.) 그리고 그걸로 ObjectGraph를 생성한다. 그 후, App인스턴스를 수동으로 삽입한다. 호출 후엔 의존성이 주입되며, AnalyticsManager 메소드를 호출할 수 있게 된다.
+
+## 결론
+이제 우리는 Dagger에 대해서 기본적으로 알게 되었다. ObjectGraph와 Modules는 Dagger를 효율적으로 사용하기 위해서 반드시 습득해야하는 가장 인상적인 컴포넌트이다. [Dagger site](http://square.github.io/dagger/)에 설명되어있는 lazy injections이나 provider injection과 같은 더 많은 툴들이 있지만, 우리가 살펴본 것들을 잘 사용할 수 있기 전까지는 보는 것을 추천하지 않는다.
+
+소스코드가 [Github](https://github.com/antoniolg/DaggerExample)에 있다는 사실을 잊지 마라.
+
+다음(아마 마지막) Dagger에 관한 포스트에서는 [scoped object graphs](https://antonioleiva.com/dagger-3/)에 대해서 다룰 것이다. 기본적으로 생성자가 있는 곳에만 존재하는 새로운 객체 그래프를 만드는 것으로 구성된다. Activity에 대한 scoped graph를 만드는 것이 일반적이다.
+
+[RSS](https://antonioleiva.com/feed/) 또는 [Google+ 프로필](https://plus.google.com/+AntonioLeivaGordillo)을 통해 지켜봐
