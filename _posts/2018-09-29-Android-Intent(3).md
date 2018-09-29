@@ -31,6 +31,6 @@ intent filter에 그 액션이 지정된 컴포넌트를 모두 호출하는 것
 ~~~
 ```ShareActivity```라는 액티비티 컴포넌트 안에 <intent-filter>를 정의하였다.
 액션의 name 특성에서 이 컴포넌트에서 허용된 인텐트 작업을 선언하였다. 
-만약 암시적 인텐트로 ```Intent intent = new Intent("android.intent.action.SEN"D)```를 호출한다면 위의 ```ShareActivity```가 불려질 것이다.
+만약 암시적 인텐트로 ```Intent intent = new Intent("android.intent.action.SEND")```를 호출한다면 위의 ```ShareActivity```가 불려질 것이다.
 데이터는 허용된 데이터 유형을 선언하며, 데이터 URI(scheme, host, port, path 등)나 MIME 유형 등의 속성을 정의할 수 있다.
 카테고리는 name 특성에서 허용된 인텐트 카테고리를 선언한다. -> [인텐트 설명 참조](https://github.com/Jiyoung9310/AndroidDoc/blob/master/_posts/2018-05-29-Android-Intent.md)
